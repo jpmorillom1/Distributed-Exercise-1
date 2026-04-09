@@ -1,120 +1,71 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
+import ActionButton from './components/ActionButton'
+import CharacterCard from './components/CharacterCard'
+import RequestHistoryList from './components/RequestHistoryList'
+import { useCharacter } from './hooks/useCharacter'
+import { useRequestHistory } from './hooks/useRequestHistory'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [characterId, setCharacterId] = useState('1')
+  const { character, loading: loadingCharacter, error: characterError, getCharacter } = useCharacter()
+  const {
+    history,
+    loading: loadingHistory,
+    error: historyError,
+    reloadHistory,
+  } = useRequestHistory()
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const parsedId = Number(characterId)
+    if (!Number.isInteger(parsedId) || parsedId <= 0) {
+      return
+    }
+
+    getCharacter(parsedId)
+  }
+
+  const isInvalidId = !Number.isInteger(Number(characterId)) || Number(characterId) <= 0
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+    <main className="app-container">
+      <header>
+        <h1>Character Explorer</h1>
+        <p>Consulta personajes y revisa el historial de transacciones del backend.</p>
+      </header>
+
+      <section className="card">
+        <h2>Buscar personaje</h2>
+        <form className="search-form" onSubmit={handleSubmit}>
+          <label htmlFor="characterId">ID del personaje</label>
+          <input
+            id="characterId"
+            type="number"
+            min="1"
+            value={characterId}
+            onChange={(event) => setCharacterId(event.target.value)}
+            placeholder="Ej: 1"
+          />
+          <ActionButton type="submit" disabled={loadingCharacter || isInvalidId}>
+            {loadingCharacter ? 'Consultando...' : 'Consultar personaje'}
+          </ActionButton>
+        </form>
+        {characterError && <p className="error-text">{characterError}</p>}
       </section>
 
-      <div className="ticks"></div>
+      <CharacterCard character={character} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      <div className="history-header">
+        <h2>Transacciones</h2>
+        <ActionButton onClick={reloadHistory} disabled={loadingHistory}>
+          {loadingHistory ? 'Actualizando...' : 'Recargar historial'}
+        </ActionButton>
+      </div>
+      {historyError && <p className="error-text">{historyError}</p>}
+      <RequestHistoryList history={history} />
+    </main>
   )
 }
 
