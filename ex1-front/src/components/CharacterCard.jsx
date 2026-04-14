@@ -8,15 +8,17 @@ export default function CharacterCard({ character }) {
   if (!character) {
     return (
       <section className="card">
-        <h2>Personaje</h2>
-        <p className="muted">Busca un ID para ver su informacion.</p>
+        <h2>Character</h2>
+        <p className="muted">
+          Search for a character ID to view its information.
+        </p>
       </section>
     );
   }
 
   return (
     <section className="card">
-      <h2>Personaje</h2>
+      <h2>Character</h2>
       <dl className="key-value-grid">
         {Object.entries(character).map(([key, value]) => (
           <div key={key} className="key-value-row">
