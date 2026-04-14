@@ -167,7 +167,6 @@ npm run lint
 
 ## 🐳 Docker
 
-
 The project includes a `docker-compose.yml` file (located in `ex1-back/`) that orchestrates all services with three main containers:
 
 ### Docker Compose Configuration
@@ -175,26 +174,29 @@ The project includes a `docker-compose.yml` file (located in `ex1-back/`) that o
 **Services:**
 
 1. **db** - PostgreSQL 16 Alpine
-  - Container: `ex1_db`
-  - Database: `ex1_db`, User: `ex1_user`, Password: `ex1_password`
-  - Port: `5432`
-  - Data persistence via volume `postgres_data`
-  - Health checks enabled to ensure database readiness before backend starts
+
+- Container: `ex1_db`
+- Database: `ex1_db`, User: `ex1_user`, Password: `ex1_password`
+- Port: `5432`
+- Data persistence via volume `postgres_data`
+- Health checks enabled to ensure database readiness before backend starts
 
 2. **backend** - Spring Boot Application
-  - Container: `ex1_backend`
-  - Built from `./Dockerfile`
-  - Port: `8080`
-  - Depends on database service (waits for health check)
-  - Environment variables configured for PostgreSQL connection
+
+- Container: `ex1_backend`
+- Built from `./Dockerfile`
+- Port: `8080`
+- Depends on database service (waits for health check)
+- Environment variables configured for PostgreSQL connection
 
 3. **frontend** - React + Vite (Node.js)
-  - Container: `ex1_frontend`
-  - Image: `node:22-alpine`
-  - Port: `5173`
-  - Command: `npm ci && npm run dev -- --host 0.0.0.0 --port 5173`
-  - Mounts local `ex1-front/` directory for live development
-  - Depends on backend service
+
+- Container: `ex1_frontend`
+- Image: `node:22-alpine`
+- Port: `5173`
+- Command: `npm ci && npm run dev -- --host 0.0.0.0 --port 5173`
+- Mounts local `ex1-front/` directory for live development
+- Depends on backend service
 
 ### Quick Start
 
@@ -205,9 +207,11 @@ docker-compose up
 ```
 
 Access the application at:
+
 - Frontend: `http://localhost:5173`
 - Backend API: `http://localhost:8080/api`
 - Database: `localhost:5432`
+
 ---
 
 ## 📝 Directory Structure
