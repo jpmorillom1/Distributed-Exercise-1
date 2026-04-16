@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: ex1-back
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ex1_db
+    username: ex1_user
+    password: ex1_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
