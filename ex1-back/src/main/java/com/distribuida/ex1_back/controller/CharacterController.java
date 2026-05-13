@@ -28,6 +28,11 @@ public class CharacterController {
         return ResponseEntity.ok(characterService.getRequestHistory());
     }
 
+    @GetMapping("/hello")
+    public String hellowrld (){
+        return "hello";
+    }
+
 
 
 
