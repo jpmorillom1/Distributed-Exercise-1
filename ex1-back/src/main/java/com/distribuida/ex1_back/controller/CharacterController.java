@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = {"*", "http://localhost:3000"})
 @RestController
 @RequestMapping("/api")
 public class CharacterController {
@@ -26,6 +26,11 @@ public class CharacterController {
     @GetMapping("/requests")
     public ResponseEntity<List<Request>> getRequestHistory() {
         return ResponseEntity.ok(characterService.getRequestHistory());
+    }
+
+    @GetMapping("/hello")
+    public String hellowrld (){
+        return "hello";
     }
 
 
